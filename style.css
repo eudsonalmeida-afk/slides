@@ -38,12 +38,8 @@ body, html {
 }
 
 @keyframes earthMotion {
-  0% {
-    transform: scale(1) translate(0, 0);
-  }
-  100% {
-    transform: scale(1.12) translate(-2.5%, -1.5%);
-  }
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.12) translate(-2.5%, -1.5%); }
 }
 
 .bg-overlay {
@@ -51,10 +47,10 @@ body, html {
   inset: 0;
   z-index: 2;
   background: linear-gradient(
-    90deg, 
-    rgba(3, 7, 18, 0.95) 0%, 
-    rgba(3, 7, 18, 0.82) 42%, 
-    rgba(3, 7, 18, 0.25) 75%, 
+    90deg,
+    rgba(3, 7, 18, 0.95) 0%,
+    rgba(3, 7, 18, 0.82) 42%,
+    rgba(3, 7, 18, 0.25) 75%,
     rgba(3, 7, 18, 0) 100%
   );
 }
@@ -90,9 +86,7 @@ body, html {
   flex-grow: 1;
 }
 
-.left-col {
-  max-width: 600px;
-}
+.left-col { max-width: 600px; }
 
 h1 {
   font-size: 4.2rem;
@@ -187,13 +181,8 @@ h1 {
   stroke-linejoin: round;
 }
 
-.icon-item:nth-child(2) .icon-svg {
-  stroke: #38bdf8;
-}
-
-.icon-item:nth-child(3) .icon-svg {
-  stroke: #fbbf24;
-}
+.icon-item:nth-child(2) .icon-svg { stroke: #38bdf8; }
+.icon-item:nth-child(3) .icon-svg { stroke: #fbbf24; }
 
 .icon-label {
   font-size: 0.8rem;
