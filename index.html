@@ -1,42 +1,231 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>A Nossa Atmosfera — com nossos slides</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nitrogênio — slide montado por etapas</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02050b;color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{display:grid;place-items:center}
+#app{position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,#102447 0%,#06101f 42%,#02050b 100%)}
+#stageWrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px 18px 78px}
+#stage{
+  position:relative;
+  width:min(calc((100vh - 100px)*1.5),calc(100vw - 36px));
+  aspect-ratio:3/2;
+  overflow:hidden;
+  border-radius:20px;
+  background:#07111d;
+  box-shadow:0 28px 90px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.08);
+}
+.frame{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transform:scale(1);filter:blur(0);
+  will-change:opacity,transform,filter;
+}
+.frame.active{opacity:1}
+.frame.entering{
+  animation:reveal .78s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes reveal{
+  0%{opacity:0;transform:scale(1.035);filter:blur(3px)}
+  55%{opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+#focusHalo{
+  position:absolute;z-index:5;width:210px;height:210px;border-radius:50%;
+  transform:translate(-50%,-50%) scale(.3);
+  pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(103,214,255,.28) 0%,rgba(103,214,255,.10) 38%,rgba(103,214,255,0) 72%);
+  mix-blend-mode:screen;
+}
+#focusHalo.pulse{animation:halo .85s ease-out}
+@keyframes halo{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.25)}
+  30%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.7)}
+}
+#topbar{
+  position:fixed;left:20px;right:20px;top:14px;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;pointer-events:none;
+}
+.chip{
+  padding:9px 13px;border-radius:999px;background:rgba(3,8,18,.55);
+  border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px);
+  font-size:12px;font-weight:700;letter-spacing:.3px;
+}
+#bottom{
+  position:fixed;left:18px;right:18px;bottom:12px;z-index:20;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;
+}
+#controls{
+  display:flex;gap:8px;padding:7px;border-radius:999px;background:rgba(3,8,18,.60);
+  border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px);
+}
+button{
+  width:43px;height:43px;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.10);color:#fff;font-size:21px;font-weight:700;
+}
+button:hover{background:rgba(255,255,255,.18)}
+#progress{
+  height:48px;padding:8px 14px;border-radius:999px;background:rgba(3,8,18,.60);
+  border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px);
+  display:flex;align-items:center;gap:12px;min-width:0;
+}
+#stepText{font-size:12px;font-weight:700;white-space:nowrap}
+#dots{display:flex;gap:6px;align-items:center;min-width:0}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.23);transition:.25s}
+.dot.done{background:#67d6ff} .dot.current{transform:scale(1.5);background:#fff}
+#hint{
+  padding:10px 14px;border-radius:999px;background:rgba(3,8,18,.60);
+  border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px);
+  font-size:11px;font-weight:700;white-space:nowrap;color:rgba(255,255,255,.78)
+}
+#start{
+  position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;
+  background:rgba(2,5,11,.72);backdrop-filter:blur(7px);cursor:pointer;
+}
+#startCard{
+  text-align:center;padding:26px 32px;border-radius:24px;background:rgba(6,16,31,.82);
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.5)
+}
+#startCard strong{display:block;font-size:28px;margin-bottom:9px}
+#startCard span{font-size:14px;color:rgba(255,255,255,.78)}
+@media(max-width:800px){
+  #bottom{grid-template-columns:auto 1fr}
+  #hint{display:none}
+  #stageWrap{padding-bottom:72px}
+  #progress{padding-right:10px}
+}
+</style>
 </head>
 <body>
-  <div id="app">
-    <div id="stageWrap">
-      <div id="stage">
-        <div id="slideCanvas">
-          <img id="slideImage" alt="slide">
-          <div id="shade"></div>
-          <div id="hotspot"></div>
-          <div id="stepLabel"></div>
+<div id="app">
+  <div id="stageWrap">
+    <div id="stage">
+      <img id="imgA" class="frame active" alt="">
+      <img id="imgB" class="frame" alt="">
+      <div id="focusHalo"></div>
+      <div id="start">
+        <div id="startCard">
+          <strong>Nitrogênio — montagem progressiva</strong>
+          <span>Clique para iniciar • depois use Espaço ou →</span>
         </div>
       </div>
     </div>
-
-    <div id="hudTop">
-      <div id="deckTitle">A Nossa Atmosfera</div>
-      <div id="slideTitle"></div>
-    </div>
-
-    <div id="hudBottom">
-      <div id="controls">
-        <button id="prevBtn" title="Voltar">←</button>
-        <button id="nextBtn" title="Avançar">→</button>
-        <button id="fullBtn" title="Tela cheia">⛶</button>
-      </div>
-      <div id="counter"></div>
-      <div id="hint">Clique / Espaço / → para avançar · ← para voltar · F tela cheia</div>
-    </div>
   </div>
-  <script src="app.js"></script>
+
+  <div id="topbar">
+    <div class="chip">MÓDULO 19 • A NOSSA ATMOSFERA</div>
+    <div class="chip">Protótipo com a sequência real do slide</div>
+  </div>
+
+  <div id="bottom">
+    <div id="controls">
+      <button id="prev" title="Voltar">←</button>
+      <button id="next" title="Avançar">→</button>
+      <button id="restart" title="Recomeçar">↺</button>
+      <button id="full" title="Tela cheia">⛶</button>
+    </div>
+    <div id="progress">
+      <div id="stepText"></div>
+      <div id="dots"></div>
+    </div>
+    <div id="hint">clique / Espaço / → avança • ← volta • F tela cheia</div>
+  </div>
+</div>
+
+<script>
+const IMAGES = ["slides/Slide_01.png", "slides/Slide_02.png", "slides/Slide_03.png", "slides/Slide_04.png", "slides/Slide_05.png", "slides/Slide_06.png", "slides/Slide_07.png", "slides/Slide_08.png", "slides/Slide_09.png", "slides/Slide_10.png"];
+const META = [{"x": 50, "y": 50, "label": "Base do slide"}, {"x": 16, "y": 59, "label": "N₂ atmosférico"}, {"x": 28, "y": 59, "label": "Bactérias fixadoras"}, {"x": 40, "y": 59, "label": "Compostos nitrogenados"}, {"x": 52, "y": 59, "label": "Planta absorve e utiliza"}, {"x": 64, "y": 59, "label": "Animal obtém nitrogênio"}, {"x": 78, "y": 59, "label": "Restos orgânicos / decomposição"}, {"x": 77, "y": 48, "label": "Fechamento do ciclo"}, {"x": 24, "y": 86, "label": "Por que isso é importante?"}, {"x": 50, "y": 50, "label": "Resumo final"}];
+let idx = 0;
+let front = 'A';
+let started = false;
+
+const a = document.getElementById('imgA');
+const b = document.getElementById('imgB');
+const halo = document.getElementById('focusHalo');
+const stepText = document.getElementById('stepText');
+const dots = document.getElementById('dots');
+const start = document.getElementById('start');
+
+IMAGES.forEach(src => { const im = new Image(); im.src = src; });
+a.src = IMAGES[0];
+
+function buildDots(){
+  dots.innerHTML='';
+  IMAGES.forEach((_,i)=>{
+    const d=document.createElement('i');
+    d.className='dot';
+    dots.appendChild(d);
+  });
+}
+buildDots();
+
+function hud(){
+  stepText.textContent = `ETAPA ${idx+1} / ${IMAGES.length} — ${META[idx].label}`;
+  [...dots.children].forEach((d,i)=>{
+    d.className='dot'+(i<idx?' done':'')+(i===idx?' current':'');
+  });
+}
+
+function pulseFocus(){
+  if(idx===0 || idx===9) return;
+  halo.style.left = META[idx].x + '%';
+  halo.style.top = META[idx].y + '%';
+  halo.classList.remove('pulse');
+  void halo.offsetWidth;
+  halo.classList.add('pulse');
+}
+
+function show(newIndex, direction=1){
+  newIndex=Math.max(0,Math.min(IMAGES.length-1,newIndex));
+  if(newIndex===idx && started) return;
+  idx=newIndex;
+  const incoming = front==='A' ? b : a;
+  const outgoing = front==='A' ? a : b;
+
+  incoming.src=IMAGES[idx];
+  incoming.style.transformOrigin = META[idx].x+'% '+META[idx].y+'%';
+  incoming.className='frame entering';
+  outgoing.className='frame active';
+
+  setTimeout(()=>{
+    outgoing.className='frame';
+    incoming.className='frame active';
+    front = front==='A' ? 'B' : 'A';
+  },780);
+
+  hud();
+  setTimeout(pulseFocus,260);
+}
+
+function next(){
+  if(!started){ started=true; start.style.display='none'; hud(); return; }
+  if(idx<IMAGES.length-1) show(idx+1,1);
+}
+function prev(){
+  if(!started) return;
+  if(idx>0) show(idx-1,-1);
+}
+function restart(){
+  started=true;start.style.display='none';show(0,-1);
+}
+
+document.getElementById('next').onclick=next;
+document.getElementById('prev').onclick=prev;
+document.getElementById('restart').onclick=restart;
+document.getElementById('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+start.onclick=next;
+document.getElementById('stage').addEventListener('click',e=>{ if(e.target.closest('#start')) return; next(); });
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();next();}
+  if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev();}
+  if(e.key.toLowerCase()==='f') document.getElementById('full').click();
+  if(e.key==='Home') restart();
+});
+hud();
+</script>
 </body>
 </html>
