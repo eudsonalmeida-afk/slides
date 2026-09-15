@@ -1,1 +1,3 @@
-Abra index.html no Chrome ou Edge. Espaço/→/clique avança; ← volta; F tela cheia. As fotos e fontes precisam de internet.
+Abra o arquivo index.html no Chrome ou Edge.
+A apresentação usa AS IMAGENS GERADAS como base visual.
+Clique, Espaço ou seta → avança. Seta ← volta. F entra em tela cheia.

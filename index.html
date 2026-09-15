@@ -1,1 +1,42 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A Nossa Atmosfera</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><main id="deck"></main><nav><button id="prev">←</button><span id="count"></span><button id="next">→</button><button id="full">⛶</button></nav><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>A Nossa Atmosfera — com nossos slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="stageWrap">
+      <div id="stage">
+        <div id="slideCanvas">
+          <img id="slideImage" alt="slide">
+          <div id="shade"></div>
+          <div id="hotspot"></div>
+          <div id="stepLabel"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="hudTop">
+      <div id="deckTitle">A Nossa Atmosfera</div>
+      <div id="slideTitle"></div>
+    </div>
+
+    <div id="hudBottom">
+      <div id="controls">
+        <button id="prevBtn" title="Voltar">←</button>
+        <button id="nextBtn" title="Avançar">→</button>
+        <button id="fullBtn" title="Tela cheia">⛶</button>
+      </div>
+      <div id="counter"></div>
+      <div id="hint">Clique / Espaço / → para avançar · ← para voltar · F tela cheia</div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
